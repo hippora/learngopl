@@ -2,40 +2,30 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"encoding/json"
+	"math"
+	"unicode/utf8"
 )
 
-type Movie struct {
-	Title  string
-	Year   int  `json:"released"`
-	Color  bool `json:"color,omitempty"`
-	Actors []string
-}
-
-var movies = []Movie{
-	{Title: "Casablanca", Year: 1942, Color: false,
-		Actors: []string{"Humphrey Bogart", "Ingrid Bergman"}},
-	{Title: "Cool Hand Luke", Year: 1967, Color: true,
-		Actors: []string{"Paul Newman"}},
-	{Title: "Bullitt", Year: 1968, Color: true,
-		Actors: []string{"Steve McQueen", "Jacqueline Bisset"}},
-	// ...
-}
-
-
 func main() {
-	data,err := json.MarshalIndent(movies,""," ")
-	if err!= nil {
-		log.Fatal("JSON marshaling failed:%s",err)
+	fmt.Printf("%d,%#[1]o,%#[1]x,%[1]b\n",1234)
+	fmt.Printf("%c,%[1]q\n",'a')
+	var f float32 = 16777216 // 1 << 24
+	fmt.Println(f == f+1)    // "true"!
+	fmt.Printf("%#3.8f,%[1]e,%[1]g\n",3.141592653)
+	fmt.Println(math.Sqrt(16.16))
+	s := "Hello, 世界"
+	for i := 0; i < len(s); {
+		r, size := utf8.DecodeRuneInString(s[i:])
+		fmt.Printf("%d\t%c\n", i, r)
+		i += size
 	}
-	fmt.Printf("%s",data)
-	var titles [] struct{Title string}
 
-	err = json.Unmarshal(data,&titles)
-	if err!=nil {
-		log.Fatal("JSON unmarshaling failed:%s",err)
+	r,size := utf8.DecodeRuneInString("世界")
+	fmt.Printf("%c,%d\n",r,size)
+	a,b := utf8.DecodeRune([]byte("世界"))
+	fmt.Printf("%c,%d\n",a,b)
+	for _,v := range []rune("プログラム") {
+		fmt.Printf("%c\n",v)
 	}
-	fmt.Println(titles)
 
 }
