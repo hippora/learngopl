@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"image/color"
+	"image/gif"
+	"io"
 	"log"
+	"math"
+	"math/rand"
 	"net/http"
 	"sync"
-	"io"
-	"image/gif"
-	"image"
-	"math/rand"
-	"math"
-	"image/color"
 )
 
 var mu sync.Mutex
@@ -20,6 +20,7 @@ var palette = []color.Color{color.White, color.Black}
 const (
 	blackIndex = 1 // next color in palette
 )
+
 func main() {
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/count", counter)

@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"strings"
-	"os"
 )
 
 var n = flag.Bool("n", false, "omit trailing newline")
@@ -17,5 +16,4 @@ func main() {
 	if !*n {
 		fmt.Println()
 	}
-	fmt.Println(os.Getwd())
 }
