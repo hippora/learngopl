@@ -66,50 +66,29 @@ func main() {
 	fmt.Println(x.String()) // "{1 9 144}"
 
 	y.Add(9)
-	y.Add(144)
-	y.Add(900)
+	y.Add(42)
 	fmt.Println(y.String()) // "{9 42}"
 
-	// x.IntersectWith(&y)
-	// x.DifferenceWith(&y)
-	x.SymmetricDifference(&y)
-	fmt.Println(x.String()) // "{9 42}"
+	x.UnionWith(&y)
+	fmt.Println(x.String())           // "{1 9 42 144}"
+	fmt.Println(x.Has(9), x.Has(123)) // "true false"
+
+	fmt.Println(x.Elems())
 
 }
 
-// IntersectWith sets s to the intersect of s and t.
-func (s *IntSet) IntersectWith(t *IntSet) {
-	if len(s.words) > len(t.words) {
-		s.words = s.words[:len(t.words)]
-	}
-	for i, tword := range t.words {
-		if i < len(s.words) {
-			s.words[i] &= tword
+// Elems return all element as slice
+func (s *IntSet) Elems() []int {
+	var buf []int
+	for i, word := range s.words {
+		if word == 0 {
+			continue
+		}
+		for j := 0; j < 64; j++ {
+			if word&(1<<uint(j)) != 0 {
+				buf = append(buf, 64*i+j)
+			}
 		}
 	}
-}
-
-// DifferenceWith sets s to the difference of s and t.
-func (s *IntSet) DifferenceWith(t *IntSet) {
-	for i, tword := range t.words {
-		if i < len(s.words) {
-			s.words[i] &= ^tword
-		}
-	}
-}
-
-// SymmetricDifference sets s to the Symmetric of s and t.
-func (s *IntSet) SymmetricDifference(t *IntSet) {
-	s1 := s.Copy()
-	s1.IntersectWith(t)
-	s.UnionWith(t)
-	s.DifferenceWith(s1)
-}
-
-// Copy return a copy of the set
-func (s *IntSet) Copy() *IntSet {
-	var x IntSet
-	x.words = make([]uint64, len(s.words))
-	copy(x.words, s.words)
-	return &x
+	return buf
 }

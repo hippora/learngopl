@@ -73,52 +73,14 @@ func main() {
 	fmt.Println(x.String())           // "{1 9 42 144}"
 	fmt.Println(x.Has(9), x.Has(123)) // "true false"
 
-	// test
-	fmt.Println(x.Len())
-	x.Remove(42)
+	x.AddAll(10, 20, 30)
 	fmt.Println(x.String())
-
-	z := x.Copy()
-	fmt.Println((*z).String())
-
-	x.Clear()
-	fmt.Println(x.String())
-	fmt.Println((*z).String())
-
 }
 
-// Len return the number of elements
-func (s *IntSet) Len() int {
-	var count int
-	for _, word := range s.words {
-		if word == 0 {
-			continue
-		}
-		for j := 0; j < 64; j++ {
-			if word&(1<<uint(j)) != 0 {
-				count++
-			}
-		}
+// AddAll add all the int like (1,2,3)
+func (s *IntSet) AddAll(x ...int) {
+	for _, v := range x {
+		s.Add(v)
 	}
-	return count
-}
 
-// Remove remove x from the set
-func (s *IntSet) Remove(x int) {
-	word, bit := x/64, uint(x%64)
-	if word < len(s.words) {
-		s.words[word] &= ^(1 << bit)
-	}
-}
-
-// Clear all elements from the set
-func (s *IntSet) Clear() {
-	s.words = s.words[:0]
-}
-
-// Copy return a copy of the set
-func (s *IntSet) Copy() *IntSet {
-	var x IntSet
-	x.words = (*s).words[:]
-	return &x
 }
