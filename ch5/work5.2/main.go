@@ -13,24 +13,22 @@ func main() {
 		fmt.Fprintf(os.Stderr, "work5.2: %v\n", err)
 		os.Exit(1)
 	}
-	for _, link := range visit(nil, doc) {
-		fmt.Println(link)
+	c := make(map[string]int, 0)
+	countElement(c, doc)
+	for i, v := range c {
+		fmt.Printf("element: %s\t%d\n", i, v)
 	}
 }
 
-func visit(links []string, n *html.Node) []string {
-	if n.Type == html.ElementNode && n.Data == "a" {
-		for _, a := range n.Attr {
-			if a.Key == "href" {
-				links = append(links, a.Val)
-			}
-		}
+func countElement(count map[string]int, n *html.Node) map[string]int {
+	if n.Type == html.ElementNode {
+		count[n.Data]++
 	}
 	if n.NextSibling != nil {
-		links = visit(links, n.NextSibling)
+		count = countElement(count, n.NextSibling)
 	}
 	if n.FirstChild != nil {
-		links = visit(links, n.FirstChild)
+		count = countElement(count, n.FirstChild)
 	}
-	return links
+	return count
 }
