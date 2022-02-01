@@ -3,3 +3,6 @@ learngo
 .DS_Store
 *.json
 *.jpg
+.idea
+.vscode
+temp
